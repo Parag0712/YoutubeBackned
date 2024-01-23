@@ -3,13 +3,18 @@
   "version": "1.0.0",
   "description": "a backend in at chai aur code ",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.js"
   },
+  
   "keywords": [
     "javascript",
     "backend"
   ],
   "author": "parag",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
 }
