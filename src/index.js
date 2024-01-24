@@ -2,20 +2,19 @@ import dotenv from 'dotenv'
 import connectDB from './db/db.js'
 import { app } from './app.js'
 // require('dotenv').config({path:'./.env'})
+
 dotenv.config({
     path: "./.env"
 })
 
-
 // call function 
 connectDB().then(() => {
-
+    console.log("Helo");
     // is called middleware
     app.on("error",(error)=>{
         console.log("ERROR :",error);
     })
-    
-    app.listeners(process.env.PORT || 8000, () => {
+    app.listen(process.env.PORT || 8000, () => {
         console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
     });
 }).catch((error) => {

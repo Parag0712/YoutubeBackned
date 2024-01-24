@@ -14,7 +14,6 @@ app.use(cors(
 
 // for json req we do this setting (json accept in this application (express.json))
 app.use(express.json({ limit: "20kb" }));
-
 // for url encode  /parag vadgama  encode like parag+vadgama
 // for this we use urlencoded
 // extend object in object
@@ -22,8 +21,16 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
 
-});
+// Route import 
+import useRouter from './routes/user.routes.js'
+
+
+app.use("/api/v1/users", useRouter)
+
+// routes declaration
+
+
+app.use("/users",useRouter)
 
 export { app }
