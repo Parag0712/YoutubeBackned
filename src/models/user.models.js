@@ -3,7 +3,6 @@ import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2'
 import bcrypt, { hash } from 'bcrypt' //for hash password
 import jwt from 'jsonwebtoken'
 
-
 const userSchema = new Schema({
     username: {
         type: String,
@@ -54,22 +53,22 @@ userSchema.pre("save", async function (next) {
 })
 
 // check encrypt password 
-userSchema.methods.isPasswordCorrect = async function(password){
-    return await bcrypt.compare(password,this.password) //result true or false
+userSchema.methods.isPasswordCorrect = async function (password) {
+    return await bcrypt.compare(password, this.password) //result true or false
 }
 
 // GenerateAccessToken :=> for generateToken
-userSchema.method.generateAccessToken = function(){
+userSchema.method.generateAccessToken = function () {
     jwt.sign(
         {
-            _id:this.id,
-            email:this.email,
-            username:this.username,
-            fullName:this.fullName
+            _id: this.id,
+            email: this.email,
+            username: this.username,
+            fullName: this.fullName
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
-            algorithm:RS256,
+            algorithm: RS256,
             expiresIn: process.env.ACCESS_TOKEN_EXPIRY
         }
     )
@@ -77,14 +76,14 @@ userSchema.method.generateAccessToken = function(){
 
 
 // GenerateRefreshToken :=> for refresh token
-userSchema.method.generateRefreshToken = function(){
+userSchema.method.generateRefreshToken = function () {
     jwt.sign(
         {
-            _id:this.id
+            _id: this.id
         },
         process.env.REFRESH_TOKEN_SECRET,
         {
-            expiresIn:process.env.REFRESH_TOKEN_EXPIRY
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY
         }
     )
 }
