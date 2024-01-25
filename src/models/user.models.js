@@ -54,31 +54,32 @@ userSchema.pre("save", async function (next) {
 
 // check encrypt password 
 userSchema.methods.isPasswordCorrect = async function (password) {
-    return await bcrypt.compare(password, this.password); //result true or false
+    return await bcrypt.compare(password,this.password) //result true or false
 }
 
 // GenerateAccessToken :=> for generateToken
-userSchema.method.generateAccessToken = function () {
-    jwt.sign(
+userSchema.methods.generateAccessToken = function () {
+    return jwt.sign(
         {
-            _id: this.id,
+            _id: this._id,
             email: this.email,
             username: this.username,
             fullName: this.fullName
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
-            algorithm: RS256,
+            // algorithm: RS256,
             expiresIn: process.env.ACCESS_TOKEN_EXPIRY
         }
     )
 }
 
+
 // GenerateRefreshToken :=> for refresh token
-userSchema.method.generateRefreshToken = function () {
-    jwt.sign(
+userSchema.methods.generateRefreshToken = function () {
+    return jwt.sign(
         {
-            _id: this.id
+            _id: this._id
         },
         process.env.REFRESH_TOKEN_SECRET,
         {

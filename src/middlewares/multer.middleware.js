@@ -7,8 +7,7 @@ const storage = multer.diskStorage({
         cb(null, './public/temp');
     },
     filename: function (req, file, cb) {
-        const uniqueFilename = uuidv4();
-        cb(null,uniqueFilename+file.originalname);
+        cb(null,file.originalname);
     }
 })
 

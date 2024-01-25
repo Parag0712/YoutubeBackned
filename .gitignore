@@ -1,4 +1,5 @@
 # Logs
+/src/controllers/Function/Register.js
 logs
 *.log
 npm-debug.log*
