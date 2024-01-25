@@ -1,13 +1,15 @@
 import multer from 'multer'
+import {v4 as uuidv4 } from 'uuid'
 
 // For File We Use This 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './public/temp')
-    }   ,
+        cb(null, './public/temp');
+    },
     filename: function (req, file, cb) {
-        cb(null, file.originalname)
+        const uniqueFilename = uuidv4();
+        cb(null,uniqueFilename+file.originalname);
     }
 })
 
-const upload = multer({ storage: storage })
+export const upload = multer({ storage: storage })
