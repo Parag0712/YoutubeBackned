@@ -24,13 +24,33 @@ const userSchema = new Schema({
         trim: true,
         index: true //searchable field like rowIndex
     },
+    // avatar: {
+    //     type: String, //cloudinary url
+    //     required: true
+    // },
+    // coverImage: {
+    //     type: String //cloudinary url
+    // },
     avatar: {
-        type: String, //cloudinary url
-        required: true
+        url: {
+            type: String,
+            required: true
+        },
+        imgId: {
+            type: String,
+            required: true
+        }
     },
+
     coverImage: {
-        type: String //cloudinary url
+        url: {
+            type: String,
+        },
+        imgId: {
+            type: String,
+        }
     },
+
     password: {
         type: String,
         required: [true, "Password is required"]
@@ -48,13 +68,13 @@ const userSchema = new Schema({
 userSchema.pre("save", async function (next) {
     //if not modified then next()
     if (!this.isModified("password")) return next()
-    this.password = await bcrypt.hash(this.password,10);
+    this.password = await bcrypt.hash(this.password, 10);
     next();
 });
 
 // check encrypt password 
 userSchema.methods.isPasswordCorrect = async function (password) {
-    return await bcrypt.compare(password,this.password) //result true or false
+    return await bcrypt.compare(password, this.password) //result true or false
 }
 
 // GenerateAccessToken :=> for generateToken
@@ -73,7 +93,6 @@ userSchema.methods.generateAccessToken = function () {
         }
     )
 }
-
 
 // GenerateRefreshToken :=> for refresh token
 userSchema.methods.generateRefreshToken = function () {
