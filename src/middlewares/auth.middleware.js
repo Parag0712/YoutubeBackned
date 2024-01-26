@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from 'jsonwebtoken'
 
+// verify Jwt function 
 export const verifyJWT = asyncHandler(async (req, res, next) => {
     try {
         // Req.Header for android ("Authorization") 

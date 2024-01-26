@@ -44,11 +44,9 @@ const generateAccessTokenAndRefreshToken = async (userId) => {
     * check for user creation null or user created
     * return res
 */
-
 const registerUser = asyncHandler(async (req, res, next) => {
     // Get Data From Form Body
     const { username, email, fullName, password } = req.body
-
     // Check username exist or not 
     validateField(fullName, "FullName");
     validateField(email, "Email");
@@ -58,8 +56,9 @@ const registerUser = asyncHandler(async (req, res, next) => {
     // Check Data exist in Mongo Or not
     const existedUser = await User.findOne({
         $or: [{ username: username }, { email: email }]
-    })
-    if (existedUser) throw new ApiError(409, "User with email or username already exists")
+    });
+
+    if (existedUser) throw new ApiError(409, "User with email or username already exists");
 
     // Now We Check Image MULTER GIVE YOU ACCESS
     const avatarLocalPath = req.files?.avatar[0]?.path;
@@ -125,11 +124,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
     // Take Data from body 
     const { username, email, password } = req.body;
-
     
-    console.log(username);
-    console.log(email);
-    console.log(password);
     // Check email or username exits or not
     if (!username || !email) {
         throw new ApiError(400, `Username or Email is required`);
@@ -152,8 +147,6 @@ const loginUser = asyncHandler(async (req, res, next) => {
         throw new (401, "Invalid user credentials");
     }
     
-
-    console.log("success validation ");
     // Now generate token
     const {accessToken,refreshToken} = await generateAccessTokenAndRefreshToken(user._id);
     
@@ -210,35 +203,42 @@ const logoutUser = asyncHandler(async (req,res,next)=>{
 
 });
 
+// RefreshToken 
 const refreshAccessToken = asyncHandler(async (req,res,next)=>{
     // Req.body.refreshToken give body
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
     if(!incomingRefreshToken){
         throw new ApiError(401,"unauthorized request");
     }
-    
+
     try {
+        //decodeToken
         const decodedToken = jwt.verify(
             incomingRefreshToken,
             process.env.REFRESH_TOKEN_SECRET
         )
 
-        const user = user.findById(decodedToken._id)
+        //find user
+        const user = await User.findById(decodedToken?._id)
         if(!user){
             throw new ApiError(401, "Invalid refresh token");
         }
 
+        //if match then give new token
         if(incomingRefreshToken !== user?.refreshToken){
             throw new ApiError(401, "Refresh token is expired or used");
         }
 
+        // Options
         const options = {
             httpOnly:true,
             secure:true
         }
 
+        //generate new token
         const {accessToken,newRefreshToken} = await generateAccessTokenAndRefreshToken(user._id);
 
+        //send cookie and status
         return res
         .status(200)
         .cookie("accessToken",accessToken,options)
@@ -251,8 +251,11 @@ const refreshAccessToken = asyncHandler(async (req,res,next)=>{
             )
         );
     } catch (error) {
+        //if some error then give error
         throw new ApiError(401, error?.message || "Invalid refresh token")
     }
 });
 
-export { registerUser, loginUser ,logoutUser}
+
+
+export { registerUser, loginUser ,logoutUser,refreshAccessToken}

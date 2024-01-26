@@ -88,6 +88,6 @@ userSchema.methods.generateRefreshToken = function () {
     )
 }
 
-// You can write aggregation query in this
-userSchema.plugin(mongooseAggregatePaginate)
-export const User = mongoose.model("User", userSchema)
+// You can write aggregation query in this due to this plugin 
+userSchema.plugin(mongooseAggregatePaginate);
+export const User = mongoose.model("User", userSchema);

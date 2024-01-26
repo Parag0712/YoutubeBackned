@@ -9,7 +9,6 @@ dotenv.config({
 
 // call function 
 connectDB().then(() => {
-    console.log("Helo");
     // is called middleware
     app.on("error",(error)=>{
         console.log("ERROR :",error);
